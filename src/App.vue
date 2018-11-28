@@ -3,7 +3,7 @@
             <div class="column is-one-third main-task">
                 <nav class="panel has-background-light">
                     <p class="panel-heading has-background-dark has-text-white">
-                        Task
+                        Task List
                     </p>
                     <div class="panel-block">
                         <p class="control has-icons-left">
@@ -13,28 +13,17 @@
                             </span>
                         </p>
                     </div>
-                    <a class="panel-block is-active" style="background-color: #f5f5f5;">
+
+                    <a v-for="task in taskList" :key="task.id" class="panel-block">
                         <input type="checkbox">
-                        Foo
+                        {{ task.title }}
                     </a>
-                    <a class="panel-block">
-                        <input type="checkbox">
-                        Bar
-                    </a>
-                    <a class="panel-block">
-                        <input type="checkbox">
-                        Baz
-                    </a>
-                    <label class="panel-block">
-                        <input type="checkbox">
-                        Other
-                    </label>
                 </nav>
             </div>
             <div class="column detail-task">
                 <nav class="panel has-background-light">
                     <p class="panel-heading has-background-dark has-text-white">
-                        Foo Detail
+                        Task Information
                     </p>
                     <div class="panel-block">
                         <p class="control has-icons-left">
@@ -45,25 +34,22 @@
                         </p>
                     </div>
                     <a class="panel-block">
-                        <textarea class="textarea" placeholder="Other Details"></textarea>
+                        <textarea v-model="selectedTask.details" class="textarea" placeholder="Other Details"></textarea>
                     </a>
                     <label class="panel-block">
                         <nav class="panel is-spaced" style="width: 100%">
                             <p class="panel-heading has-background-grey has-text-white">
                                 Sub-Tasks
                             </p>
-                            <a class="panel-block">
+                            <div v-if="isTaskSelected()">
+                                <a v-for="subtask in selectedTask.subtasks" :key="subtask.id" class="panel-block">
                                 <input type="checkbox">
-                                Bar
-                            </a>
-                            <a class="panel-block">
-                                <input type="checkbox">
-                                Baz
-                            </a>
-                            <label class="panel-block">
-                                <input type="checkbox">
-                                Other
-                            </label>
+                                {{ subtask.title }}
+                             </a>
+                            </div>
+                            <div v-else>
+                                    No task selected.
+                            </div>
                         </nav>
                     </label>
                 </nav>
@@ -71,19 +57,48 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-
-export default class App extends Vue {}
+<script lang="script">
+export default {
+    data() {
+        return {
+            selectedTask: {
+                id: null,
+                title: null,
+                details: null,
+            },
+            taskList : [
+                {
+                    id: 1,
+                    title: 'Task1',
+                    details: 'Task1 Great Details',
+                    done: false,
+                    subtasks: [
+                        {id: 1, title: 'SubTask1', details: 'SubTask1 Great Details', done: false},
+                        {id: 2, title: 'SubTask2', details: 'SubTask2 Great Details', done: false},
+                        {id: 3, title: 'SubTask3', details: 'SubTask3 Great Details', done: false},
+                        {id: 4, title: 'SubTask4', details: 'SubTask4 Great Details', done: true},
+                    ]
+                },
+                {id: 2, title: 'Task2', details: 'Task2 Great Details', done: false, subtasks: []},
+                {id: 3, title: 'Task3', details: 'Task3 Great Details', done: false, subtasks: []},
+                {id: 4, title: 'Task4', details: 'Task4 Great Details', done: false, subtasks: []},
+                {id: 5, title: 'Task5', details: 'Task5 Great Details', done: true, subtasks: []},
+            ]
+        }
+    },
+    methods: {
+        isTaskSelected() {
+            return this.selectedTask.id;
+        },
+        updateSelectedTask(task) {
+            this.selectedTask = task;
+        },
+        addTask() {
+            
+        }
+    }
+}
 </script>
 
 <style lang="scss">
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>

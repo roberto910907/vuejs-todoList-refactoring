@@ -7,15 +7,15 @@
                     </p>
                     <div class="panel-block">
                         <p class="control has-icons-left">
-                            <input class="input is-small" type="text" placeholder="New Task">
+                            <input v-model="newTask.title" class="input is-small" type="text" placeholder="New Task" @keyup.enter="addNewTask(newTask)">
                             <span class="icon is-small is-left">
                                 <i class="fas fa-search" aria-hidden="true"></i>
                             </span>
                         </p>
                     </div>
 
-                    <a v-for="task in taskList" :key="task.id" class="panel-block">
-                        <input type="checkbox">
+                    <a v-for="task in taskList" :key="task.id" @click="updateSelectedTask(task)" :class="'panel-block' + (task.done ? ' task-done': '')">
+                        <input type="checkbox" v-model="task.done">
                         {{ task.title }}
                     </a>
                 </nav>
@@ -27,14 +27,14 @@
                     </p>
                     <div class="panel-block">
                         <p class="control has-icons-left">
-                            <input class="input is-small" type="text" placeholder="Tittle">
+                            <input v-model="selectedTask.title" :disabled="selectedTask.done" class="input is-small" type="text" placeholder="Tittle">
                             <span class="icon is-small is-left">
                                 <i class="fas fa-search" aria-hidden="true"></i>
                             </span>
                         </p>
                     </div>
                     <a class="panel-block">
-                        <textarea v-model="selectedTask.details" class="textarea" placeholder="Other Details"></textarea>
+                        <textarea v-model="selectedTask.details" :disabled="selectedTask.done" class="textarea" placeholder="Other Details"></textarea>
                     </a>
                     <label class="panel-block">
                         <nav class="panel is-spaced" style="width: 100%">
@@ -42,8 +42,8 @@
                                 Sub-Tasks
                             </p>
                             <div v-if="isTaskSelected()">
-                                <a v-for="subtask in selectedTask.subtasks" :key="subtask.id" class="panel-block">
-                                <input type="checkbox">
+                                <a v-for="subtask in selectedTask.subtasks" :key="subtask.id" :class="'panel-block' + (subtask.done ? ' task-done': '')">
+                                <input type="checkbox" v-model="subtask.done">
                                 {{ subtask.title }}
                              </a>
                             </div>
@@ -61,10 +61,22 @@
 export default {
     data() {
         return {
+            newTask: {
+                id: null,
+                title: null,
+                details: 'Default Title',
+                done: false,
+                subtasks: [
+                    {id: 1, title: 'SubTask1', details: 'SubTask1 Great Details', done: false},
+                    {id: 2, title: 'SubTask2', details: 'SubTask2 Great Details', done: false},
+                ]
+            },
             selectedTask: {
                 id: null,
                 title: null,
                 details: null,
+                done: null,
+                subtasks: []
             },
             taskList : [
                 {
@@ -93,12 +105,21 @@ export default {
         updateSelectedTask(task) {
             this.selectedTask = task;
         },
-        addTask() {
-            
+        addNewTask(task) {
+            if(!task.title){
+                return;
+            }
+
+            this.taskList.push({...task});
+            this.newTask.title = null;
         }
     }
 }
 </script>
 
-<style lang="scss">
+<style lang="css">
+.task-done, .task-done:hover {
+  text-decoration: line-through;
+  color: #ccc;
+}
 </style>

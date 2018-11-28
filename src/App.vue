@@ -38,7 +38,7 @@
                             <p class="panel-heading has-background-grey has-text-white">
                                 Sub-Tasks
                             </p>
-                            <div v-if="isTaskSelected()">
+                            <div v-if="isTaskSelected">
                                 <task-list :task-list="selectedTask.subtasks"></task-list>
                             </div>
                             <div v-else>
@@ -97,10 +97,12 @@ export default {
             ]
         }
     },
-    methods: {
+    computed: {
         isTaskSelected() {
             return this.selectedTask.id;
         },
+    },
+    methods: {
         updateSelectedTask($event) {
             this.selectedTask = $event;
         },

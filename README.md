@@ -1,26 +1,17 @@
-# todo-list
+# Vuejs TodoList Application Refactoring
 
-## Project setup
-```
-npm install
-```
+Created using vue-cli package.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+Refactoring a Vue.js application using:
+- Components
+- Vuex
 
-### Compiles and minifies for production
-```
-npm run build
-```
+# Run application
+- npm run serve
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Run your unit tests
-```
-npm run test:unit
-```
+# Next Steps
+- Add tests with Jest
+- Add typescript to model objects
+- Provide an example using a module store for each component
+- Add watchers, lifecycles, etc\
+- Add Vue-Router

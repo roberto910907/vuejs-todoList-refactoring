@@ -18,4 +18,4 @@ Refactoring a Vue.js application using:
 - Build native mobile application using NativeScript
 - Add a Backend API and connect Vue Application to it
 - Add Server Side Rendering Example
-- Move to Real-Time application using (Mercure)[https://github.com/dunglas/mercure]
+- Move to Real-Time application using [Mercure](https://github.com/dunglas/mercure)

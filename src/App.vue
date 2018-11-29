@@ -14,10 +14,7 @@
                         </p>
                     </div>
 
-                    <a v-for="task in taskList" :key="task.id" @click="updateSelectedTask(task)" :class="'panel-block' + (task.done ? ' task-done': '')">
-                        <input type="checkbox" v-model="task.done">
-                        {{ task.title }}
-                    </a>
+                    <task-list :task-list="taskList" @updateSelectedTask="updateSelectedTask"></task-list>
                 </nav>
             </div>
             <div class="column detail-task">
@@ -41,11 +38,8 @@
                             <p class="panel-heading has-background-grey has-text-white">
                                 Sub-Tasks
                             </p>
-                            <div v-if="isTaskSelected()">
-                                <a v-for="subtask in selectedTask.subtasks" :key="subtask.id" :class="'panel-block' + (subtask.done ? ' task-done': '')">
-                                <input type="checkbox" v-model="subtask.done">
-                                {{ subtask.title }}
-                             </a>
+                            <div v-if="isTaskSelected">
+                                <task-list :task-list="selectedTask.subtasks"></task-list>
                             </div>
                             <div v-else>
                                     No task selected.
@@ -58,7 +52,12 @@
 </template>
 
 <script lang="script">
+import TaskList from "./components/TaskList"; 
+
 export default {
+    components: {
+        'task-list': TaskList
+    },
     data() {
         return {
             newTask: {
@@ -98,12 +97,14 @@ export default {
             ]
         }
     },
-    methods: {
+    computed: {
         isTaskSelected() {
             return this.selectedTask.id;
         },
-        updateSelectedTask(task) {
-            this.selectedTask = task;
+    },
+    methods: {
+        updateSelectedTask($event) {
+            this.selectedTask = $event;
         },
         addNewTask(task) {
             if(!task.title){

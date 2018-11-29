@@ -14,7 +14,7 @@
                         </p>
                     </div>
 
-                    <task-list :task-list="taskList" @updateSelectedTask="updateSelectedTask"></task-list>
+                    <task-list :task-list="taskList" @updateSelectedTask="updateSelectedTask($event)"></task-list>
                 </nav>
             </div>
             <div class="column detail-task">
@@ -53,73 +53,36 @@
 
 <script lang="script">
 import TaskList from "./components/TaskList"; 
+import { mapGetters, mapActions} from "vuex";
 
 export default {
     components: {
         'task-list': TaskList
     },
-    data() {
-        return {
-            newTask: {
-                id: null,
-                title: null,
-                details: 'Default Title',
-                done: false,
-                subtasks: [
-                    {id: 1, title: 'SubTask1', details: 'SubTask1 Great Details', done: false},
-                    {id: 2, title: 'SubTask2', details: 'SubTask2 Great Details', done: false},
-                ]
-            },
-            selectedTask: {
-                id: null,
-                title: null,
-                details: null,
-                done: null,
-                subtasks: []
-            },
-            taskList : [
-                {
-                    id: 1,
-                    title: 'Task1',
-                    details: 'Task1 Great Details',
-                    done: false,
-                    subtasks: [
-                        {id: 1, title: 'SubTask1', details: 'SubTask1 Great Details', done: false},
-                        {id: 2, title: 'SubTask2', details: 'SubTask2 Great Details', done: false},
-                        {id: 3, title: 'SubTask3', details: 'SubTask3 Great Details', done: false},
-                        {id: 4, title: 'SubTask4', details: 'SubTask4 Great Details', done: true},
-                    ]
-                },
-                {id: 2, title: 'Task2', details: 'Task2 Great Details', done: false, subtasks: []},
-                {id: 3, title: 'Task3', details: 'Task3 Great Details', done: false, subtasks: []},
-                {id: 4, title: 'Task4', details: 'Task4 Great Details', done: false, subtasks: []},
-                {id: 5, title: 'Task5', details: 'Task5 Great Details', done: true, subtasks: []},
-            ]
-        }
+    created() {
+        this.fetchTaskList();
     },
     computed: {
-        isTaskSelected() {
-            return this.selectedTask.id;
-        },
+     ...mapGetters({
+        isTaskSelected: 'isTaskSelected',
+        selectedTask: 'selectedTask',
+        newTask: 'newTask',
+        taskList: 'taskList',
+    })
     },
     methods: {
-        updateSelectedTask($event) {
-            this.selectedTask = $event;
-        },
-        addNewTask(task) {
-            if(!task.title){
-                return;
-            }
-
-            this.taskList.push({...task});
-            this.newTask.title = null;
-        }
+    ...mapActions({
+        fetchTaskList: 'fetchTaskList',
+        addNewTask: 'addNewTask',
+        updateSelectedTask: 'updateTask',
+    })
     }
 }
 </script>
 
 <style lang="css">
-.task-done, .task-done:hover {
+.task-done,
+.task-done:hover {
   text-decoration: line-through;
   color: #ccc;
 }
